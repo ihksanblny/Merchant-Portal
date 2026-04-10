@@ -1,0 +1,27 @@
+1. Kontrol Docker (Sail)
+Perintah	Fungsi
+wsl ./vendor/bin/sail up -d	Menyalakan semua container di background.
+wsl ./vendor/bin/sail down	Mematikan semua container.
+wsl ./vendor/bin/sail ps	Melihat status container (apakah sudah up/jalan).
+
+2. Database & PHP (Artisan)
+Perintah	Fungsi
+wsl ./vendor/bin/sail artisan migrate	Menjalankan migrasi database.
+wsl ./vendor/bin/sail artisan migrate:fresh --seed	Menghapus dan membuat ulang database + data dummy.
+wsl ./vendor/bin/sail artisan tinker	Masuk ke shell interaktif Laravel.
+wsl ./vendor/bin/sail composer install	Menginstal package PHP baru.
+
+3. Frontend (JavaScript/Vite)
+Perintah	Fungsi
+wsl ./vendor/bin/sail npm install	Menginstal dependencies (seperti Lucide, Vue, dsb).
+wsl ./vendor/bin/sail npm run dev	Menyalakan Vite (WAJIB agar CSS/JS muncul di browser).
+wsl ./vendor/bin/sail npm run build	Menyiapkan asset untuk produksi.
+
+4. WebSocket (Laravel Reverb)
+Perintah	Fungsi
+wsl ./vendor/bin/sail artisan reverb:start	Menyalakan server WebSocket (biarkan terminal ini terbuka).
+
+5. Testing (Pest)
+Perintah	Fungsi
+wsl ./vendor/bin/sail artisan test	Menjalankan semua test menggunakan Pest.
+wsl ./vendor/bin/sail pest --filter [nama]	Menjalankan test spesifik saja.
