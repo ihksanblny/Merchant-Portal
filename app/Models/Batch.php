@@ -9,7 +9,7 @@ class Batch extends Model
     protected $fillable = [
         'product_id',
         'batch_code',
-        'expire_date',
+        'expiry_date',
         'initial_qty',
         'current_qty',
     ];
