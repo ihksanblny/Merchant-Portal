@@ -20,7 +20,7 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
-        "apexcharts": "^5.10.5",
+        "apexcharts": "^5.10.6",
         "lucide-vue-next": "^1.0.0",
         "vue3-apexcharts": "^1.11.1"
     }

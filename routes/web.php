@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuickLogController;
 use Illuminate\Foundation\Application;
+use App\Models\Batch;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,18 +17,9 @@ Route::get('/', function () {
     ]);
 });
 
-use App\Models\Batch;
-use App\Models\Transaction;
+use App\Http\Controllers\DashboardController;
 
-Route::get('/dashboard', function () {
-    $batches = Batch::with('product')->orderBy('expiry_date', 'asc')->get();
-    $transactions = Transaction::with(['product', 'batch'])->orderBy('created_at', 'desc')->take(20)->get();
-
-    return Inertia::render('Dashboard', [
-        'batches' => $batches,
-        'transactions' => $transactions,
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -1,10 +1,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import VueApexCharts from 'vue3-apexcharts';
+import { computed } from 'vue';
 
 const props = defineProps({
     batches: Array,
     transactions: Array,
+    metrics: Object,
 });
 
 const formatDate = (dateString) => {
@@ -20,6 +23,28 @@ const formatDateTime = (dateString) => {
         day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit'
     });
 };
+
+// Pengaturan Chart Kesehatan Stok
+const healthScoreColor = computed(() => {
+    if (props.metrics.health_score >= 80) return '#10b981'; // Hijau Aman
+    if (props.metrics.health_score >= 40) return '#f59e0b'; // Kuning Waspada
+    return '#ef4444'; // Merah Bahaya
+});
+
+const healthChartOptions = computed(() => ({
+    chart: { type: 'radialBar' },
+    plotOptions: {
+        radialBar: {
+            hollow: { size: '65%' },
+            dataLabels: {
+                name: { show: false },
+                value: { show: true, fontSize: '28px', fontWeight: 'bold', color: '#1f2937', formatter: (val) => val + '%' }
+            }
+        }
+    },
+    colors: [healthScoreColor.value],
+    stroke: { lineCap: 'round' },
+}));
 </script>
 
 <template>
@@ -35,6 +60,60 @@ const formatDateTime = (dateString) => {
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
                 
+                <!-- Section: Metrik Utama (Fase 4) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Metro 1: Health Score -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 flex flex-col items-center justify-center relative">
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest absolute top-6 left-6">Kesehatan Stok</h3>
+                        <div class="mt-8 w-full flex justify-center">
+                            <VueApexCharts type="radialBar" :options="healthChartOptions" :series="[metrics.health_score]" height="250" />
+                        </div>
+                        <p class="text-xs text-gray-400 mt-2 text-center">
+                            {{ metrics.at_risk_qty }} dari {{ metrics.total_qty }} item berisiko kedaluwarsa.
+                        </p>
+                    </div>
+
+                    <!-- Metro 2: Burn Rate -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 flex flex-col relative justify-center">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <div class="p-3 bg-red-100 text-red-600 rounded-lg">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Burn Rate (Avg Sales)</h3>
+                                <p class="text-3xl font-black text-gray-900 mt-1">{{ metrics.burn_rate }} <span class="text-sm text-gray-500 font-normal">item/hari</span></p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-4 leading-relaxed">
+                            Rata-rata penjualan harian dari 7 hari terakhir. Naikkan angka ini untuk meningkatkan kecepatan perputaran barang!
+                        </p>
+                    </div>
+
+                    <!-- Metro 3: Fast & Slow Moving -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex flex-col border border-gray-100">
+                        <div class="flex-1 p-4 border-b border-gray-100 bg-emerald-50/30">
+                            <h3 class="text-xs font-bold text-emerald-700 uppercase tracking-widest flex items-center mb-2"><span class="mr-1">⚡</span> Fast-Moving Items</h3>
+                            <ul class="text-sm space-y-1">
+                                <li v-for="item in metrics.fast_moving" :key="'f-'+item.id" class="flex justify-between text-gray-700">
+                                    <span class="truncate pr-2">{{ item.name }}</span>
+                                    <strong class="text-emerald-600 shrink-0">{{ item.sales_30d }}x</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="flex-1 p-4 bg-orange-50/30">
+                            <h3 class="text-xs font-bold text-orange-700 uppercase tracking-widest flex items-center mb-2"><span class="mr-1">🐌</span> Slow-Moving Items</h3>
+                            <ul class="text-sm space-y-1">
+                                <li v-for="item in metrics.slow_moving" :key="'s-'+item.id" class="flex justify-between text-gray-700">
+                                    <span class="truncate pr-2">{{ item.name }}</span>
+                                    <strong class="text-orange-600 shrink-0">{{ item.sales_30d }}x</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
                 <!-- Section: Sisa Stok per Batch -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 border-b border-gray-100">
