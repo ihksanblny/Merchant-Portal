@@ -15,8 +15,17 @@ Route::get('/', function () {
     ]);
 });
 
+use App\Models\Batch;
+use App\Models\Transaction;
+
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $batches = Batch::with('product')->orderBy('expiry_date', 'asc')->get();
+    $transactions = Transaction::with(['product', 'batch'])->orderBy('created_at', 'desc')->take(20)->get();
+
+    return Inertia::render('Dashboard', [
+        'batches' => $batches,
+        'transactions' => $transactions,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
