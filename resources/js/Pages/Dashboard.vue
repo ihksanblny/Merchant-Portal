@@ -32,7 +32,7 @@ const healthScoreColor = computed(() => {
 });
 
 const healthChartOptions = computed(() => ({
-    chart: { type: 'radialBar' },
+    chart: { type: 'radialBar', fontFamily: 'Inter, sans-serif' },
     plotOptions: {
         radialBar: {
             hollow: { size: '65%' },
@@ -52,19 +52,18 @@ const healthChartOptions = computed(() => ({
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Dashboard Laporan Inventori
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900">
+                Dashboard
             </h2>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
+        <div class="space-y-8 mt-2">
                 
                 <!-- Section: Metrik Utama (Fase 4) -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
                     <!-- Metro 1: Health Score -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 flex flex-col items-center justify-center relative">
+                    <div class="bg-surface-lowest rounded-[2rem] shadow-ambient p-8 flex flex-col items-center justify-center relative">
                         <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest absolute top-6 left-6">Kesehatan Stok</h3>
                         <div class="mt-8 w-full flex justify-center">
                             <VueApexCharts type="radialBar" :options="healthChartOptions" :series="[metrics.health_score]" height="250" />
@@ -75,7 +74,7 @@ const healthChartOptions = computed(() => ({
                     </div>
 
                     <!-- Metro 2: Burn Rate -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 flex flex-col relative justify-center">
+                    <div class="bg-surface-lowest rounded-[2rem] shadow-ambient p-8 flex flex-col relative justify-center">
                         <div class="flex items-center space-x-3 mb-2">
                             <div class="p-3 bg-red-100 text-red-600 rounded-lg">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
@@ -91,22 +90,22 @@ const healthChartOptions = computed(() => ({
                     </div>
 
                     <!-- Metro 3: Fast & Slow Moving -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex flex-col border border-gray-100">
-                        <div class="flex-1 p-4 border-b border-gray-100 bg-emerald-50/30">
-                            <h3 class="text-xs font-bold text-emerald-700 uppercase tracking-widest flex items-center mb-2"><span class="mr-1">⚡</span> Fast-Moving Items</h3>
-                            <ul class="text-sm space-y-1">
-                                <li v-for="item in metrics.fast_moving" :key="'f-'+item.id" class="flex justify-between text-gray-700">
-                                    <span class="truncate pr-2">{{ item.name }}</span>
-                                    <strong class="text-emerald-600 shrink-0">{{ item.sales_30d }}x</strong>
+                    <div class="bg-surface-lowest rounded-[2rem] shadow-ambient flex flex-col overflow-hidden">
+                        <div class="flex-1 p-6 border-b border-surface-low bg-emerald-50/20">
+                            <h3 class="text-[10px] font-bold text-emerald-700 uppercase tracking-widest flex items-center mb-4"><span class="mr-2">⚡</span> Fast-Moving Items</h3>
+                            <ul class="text-sm space-y-3">
+                                <li v-for="item in metrics.fast_moving" :key="'f-'+item.id" class="flex justify-between items-center text-gray-700">
+                                    <span class="truncate pr-2 font-medium">{{ item.name }}</span>
+                                    <strong class="text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full shrink-0">{{ item.sales_30d }}x</strong>
                                 </li>
                             </ul>
                         </div>
-                        <div class="flex-1 p-4 bg-orange-50/30">
-                            <h3 class="text-xs font-bold text-orange-700 uppercase tracking-widest flex items-center mb-2"><span class="mr-1">🐌</span> Slow-Moving Items</h3>
-                            <ul class="text-sm space-y-1">
-                                <li v-for="item in metrics.slow_moving" :key="'s-'+item.id" class="flex justify-between text-gray-700">
-                                    <span class="truncate pr-2">{{ item.name }}</span>
-                                    <strong class="text-orange-600 shrink-0">{{ item.sales_30d }}x</strong>
+                        <div class="flex-1 p-6 bg-orange-50/20">
+                            <h3 class="text-[10px] font-bold text-orange-700 uppercase tracking-widest flex items-center mb-4"><span class="mr-2">🐌</span> Slow-Moving Items</h3>
+                            <ul class="text-sm space-y-3">
+                                <li v-for="item in metrics.slow_moving" :key="'s-'+item.id" class="flex justify-between items-center text-gray-700">
+                                    <span class="truncate pr-2 font-medium">{{ item.name }}</span>
+                                    <strong class="text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full shrink-0">{{ item.sales_30d }}x</strong>
                                 </li>
                             </ul>
                         </div>
@@ -115,14 +114,15 @@ const healthChartOptions = computed(() => ({
                 </div>
 
                 <!-- Section: Sisa Stok per Batch -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 border-b border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 z-10 flex items-center">📦 Total Stok per Batch</h3>
-                        <p class="text-sm text-gray-500 mb-4 -mt-3">Status actual sisa gudang (diurutkan dari yg mau basi).</p>
+                <div class="bg-surface-lowest shadow-ambient rounded-[2rem] overflow-hidden p-8">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold tracking-tight text-gray-900 mb-1 flex items-center">📦 Total Stok per Batch</h3>
+                        <p class="text-sm text-gray-500">Status aktual sisa gudang (diurutkan dari yang terdekat kadaluwarsa).</p>
+                    </div>
                         
-                        <div class="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                            <table class="min-w-full text-left text-sm whitespace-nowrap">
-                                <thead class="uppercase border-b border-gray-200 bg-gray-50 text-gray-500 text-xs font-semibold">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-left text-sm whitespace-nowrap">
+                            <thead class="uppercase border-b border-surface-low text-gray-400 tracking-wider text-xs font-bold">
                                     <tr>
                                         <th class="px-6 py-3">Nama Produk</th>
                                         <th class="px-6 py-3">Kode Batch</th>
@@ -152,16 +152,16 @@ const healthChartOptions = computed(() => ({
                             </table>
                         </div>
                     </div>
-                </div>
 
                 <!-- Section: Riwayat Transaksi -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">📝 Riwayat Aktivitas & Transaksi</h3>
+                <div class="bg-surface-lowest shadow-ambient rounded-[2rem] overflow-hidden p-8">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold tracking-tight text-gray-900 mb-1 flex items-center">📝 Riwayat Aktivitas & Transaksi</h3>
+                    </div>
                         
-                        <div class="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                            <table class="min-w-full text-left text-sm whitespace-nowrap">
-                                <thead class="uppercase border-b border-gray-200 bg-gray-50 text-gray-500 text-xs font-semibold">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-left text-sm whitespace-nowrap">
+                            <thead class="uppercase border-b border-surface-low text-gray-400 tracking-wider text-xs font-bold">
                                     <tr>
                                         <th class="px-6 py-3">Waktu</th>
                                         <th class="px-6 py-3">Aksi</th>
@@ -191,9 +191,7 @@ const healthChartOptions = computed(() => ({
                             </table>
                         </div>
                     </div>
-                </div>
 
             </div>
-        </div>
     </AuthenticatedLayout>
 </template>

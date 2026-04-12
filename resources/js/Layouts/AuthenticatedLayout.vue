@@ -1,210 +1,96 @@
 <script setup>
-import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-
-const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
-    <div>
-        <div class="min-h-screen bg-gray-100">
-            <nav
-                class="border-b border-gray-100 bg-white"
-            >
-                <!-- Primary Navigation Menu -->
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="flex h-16 justify-between">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800"
-                                    />
-                                </Link>
-                            </div>
-
-                            <!-- Navigation Links -->
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
-                            >
-                                <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    :href="route('quick-log.index')"
-                                    :active="route().current('quick-log.*')"
-                                >
-                                    Quick Log
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                            <!-- Settings Dropdown -->
-                            <div class="relative ms-3">
-                                <Dropdown align="right" width="48">
-                                    <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {{ $page.props.auth.user.name }}
-
-                                                <svg
-                                                    class="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </template>
-
-                                    <template #content>
-                                        <DropdownLink
-                                            :href="route('profile.edit')"
-                                        >
-                                            Profile
-                                        </DropdownLink>
-                                        <DropdownLink
-                                            :href="route('logout')"
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </DropdownLink>
-                                    </template>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button
-                                @click="
-                                    showingNavigationDropdown =
-                                        !showingNavigationDropdown
-                                "
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                            >
-                                <svg
-                                    class="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        :class="{
-                                            hidden: showingNavigationDropdown,
-                                            'inline-flex':
-                                                !showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        :class="{
-                                            hidden: !showingNavigationDropdown,
-                                            'inline-flex':
-                                                showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
+    <div class="flex h-screen bg-surface overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-surface-lowest shadow-ambient flex-shrink-0 hidden md:flex flex-col z-20 rounded-r-[3rem] my-4 ml-4">
+            <!-- Logo -->
+            <div class="h-32 flex items-center px-10">
+                <Link :href="route('dashboard')">
+                    <div class="text-[1.75rem] font-black tracking-tighter text-brand-container leading-none">
+                        Merchant
+                        <br/><span class="text-brand">Portal.</span>
                     </div>
-                </div>
+                </Link>
+            </div>
 
-                <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{
-                        block: showingNavigationDropdown,
-                        hidden: !showingNavigationDropdown,
-                    }"
-                    class="sm:hidden"
+            <!-- Navigation Links -->
+            <nav class="flex-1 px-6 space-y-3 mt-4">
+                <Link
+                    :href="route('dashboard')"
+                    :class="[route().current('dashboard') ? 'bg-surface px-6 py-4 rounded-full font-bold text-brand-container shadow-sm' : 'px-6 py-4 rounded-full font-medium text-gray-500 hover:bg-surface-low hover:text-gray-900 transition-all duration-300', 'flex items-center space-x-4 w-full']"
                 >
-                    <div class="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('quick-log.index')"
-                            :active="route().current('quick-log.*')"
-                        >
-                            Quick Log
-                        </ResponsiveNavLink>
-                    </div>
+                    <!-- Dashboard Icon -->
+                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <span class="text-sm">Dashboard</span>
+                </Link>
 
-                    <!-- Responsive Settings Options -->
-                    <div
-                        class="border-t border-gray-200 pb-1 pt-4"
-                    >
-                        <div class="px-4">
-                            <div
-                                class="text-base font-medium text-gray-800"
-                            >
-                                {{ $page.props.auth.user.name }}
-                            </div>
-                            <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
-                            </div>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                </div>
+                <Link
+                    :href="route('quick-log.index')"
+                    :class="[route().current('quick-log.*') ? 'bg-surface px-6 py-4 rounded-full font-bold text-brand-container shadow-sm' : 'px-6 py-4 rounded-full font-medium text-gray-500 hover:bg-surface-low hover:text-gray-900 transition-all duration-300', 'flex items-center space-x-4 w-full']"
+                >
+                    <!-- Quick Log Icon -->
+                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    <span class="text-sm">Quick Log</span>
+                </Link>
             </nav>
 
-            <!-- Page Heading -->
-            <header
-                class="bg-white shadow"
-                v-if="$slots.header"
-            >
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <slot name="header" />
+            <!-- User Profile & Settings -->
+            <div class="p-6">
+                <!-- Dropdown replacement: we just use a pill style container -->
+                <div class="bg-surface rounded-[2rem] p-5 flex flex-col space-y-4 shadow-sm border border-surface-low">
+                    <div class="flex items-center space-x-3 pb-4 border-b border-gray-200 border-dashed">
+                        <div class="h-10 w-10 rounded-full bg-brand-container/10 flex items-center justify-center text-brand font-black text-lg shadow-inner">
+                            {{ $page.props.auth.user.name.charAt(0) }}
+                        </div>
+                        <div class="flex-1 overflow-hidden">
+                            <p class="text-sm font-bold text-gray-900 truncate">{{ $page.props.auth.user.name }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ $page.props.auth.user.email }}</p>
+                        </div>
+                    </div>
+                    
+                    <Link :href="route('profile.edit')" class="text-sm font-semibold text-gray-500 hover:text-brand-container transition flex flex-row items-center">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        Kelola Akun
+                    </Link>
+                    <Link :href="route('logout')" method="post" as="button" class="text-sm font-semibold text-red-400 hover:text-red-600 transition flex flex-row items-center w-full text-left">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        Logout
+                    </Link>
                 </div>
-            </header>
+            </div>
+        </aside>
 
-            <!-- Page Content -->
-            <main>
-                <slot />
-            </main>
-        </div>
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden bg-surface relative">
+            
+            <!-- Mobile Header (Visible only on md-) -->
+            <div class="md:hidden bg-surface-lowest shadow-sm h-16 flex items-center justify-between px-6 z-20">
+                <div class="text-xl font-black tracking-tighter text-brand-container">
+                    Merchant<span class="text-brand">Portal.</span>
+                </div>
+                <!-- A simple settings link on mobile to logout/profile -->
+                <Link :href="route('profile.edit')" class="text-brand font-bold p-2 bg-surface rounded-full">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                </Link>
+            </div>
+
+            <!-- Page Padding + Scroll Area -->
+            <div class="flex-1 overflow-y-auto w-full pt-12 pb-32 px-6 lg:px-16 relative">
+                
+                <!-- Page Heading Custom Slot -->
+                <header v-if="$slots.header" class="mb-12 w-full max-w-6xl mx-auto">
+                    <slot name="header" />
+                </header>
+
+                <!-- Page Content -->
+                <div class="w-full max-w-6xl mx-auto">
+                    <slot />
+                </div>
+                
+            </div>
+        </main>
     </div>
 </template>

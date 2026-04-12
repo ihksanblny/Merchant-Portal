@@ -13,8 +13,22 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                surface: {
+                    DEFAULT: '#f8f9fa',
+                    low: '#f3f4f5',
+                    lowest: '#ffffff',
+                },
+                brand: {
+                    DEFAULT: '#3525cd',
+                    container: '#4f46e5',
+                }
+            },
+            boxShadow: {
+                'ambient': '0 20px 40px rgba(70, 69, 85, 0.06)',
+            }
         },
     },
 

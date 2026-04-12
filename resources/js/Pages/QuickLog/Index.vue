@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import CustomSelect from '@/Components/CustomSelect.vue';
 
 const props = defineProps({
     products: Array,
@@ -43,12 +44,14 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Quick Log Transaksi</h2>
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900">Quick Log Transaksi</h2>
+            <p class="text-gray-500 mt-2 text-sm max-w-xl">
+                Catat masuk-keluarnya barang dengan cepat. Sistem akan otomatis memonitor/memotong batch yang paling dekat dengan tanggal kedaluwarsa.
+            </p>
         </template>
 
-        <div class="py-12">
-            <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="max-w-3xl mt-4">
+                <div class="bg-surface-lowest shadow-ambient rounded-[2rem] overflow-hidden mb-12">
                     
                     <!-- Alert Success -->
                     <div v-if="$page.props.flash?.success" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mx-6 mt-6 rounded text-sm font-medium">
@@ -61,37 +64,34 @@ const submit = () => {
                     </div>
 
                     <!-- Tabs Header -->
-                    <div class="border-b border-gray-200 mt-4">
-                        <nav class="-mb-px flex justify-between" aria-label="Tabs">
+                    <div class="px-8 mt-8">
+                        <nav class="flex space-x-2 p-1 bg-surface-low rounded-2xl" aria-label="Tabs">
                             <button @click="activeTab = 'RESTOCK'" type="button"
-                                :class="[activeTab === 'RESTOCK' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'w-1/3 py-4 px-1 text-center border-b-2 font-medium text-sm transition-colors duration-200']">
+                                :class="[activeTab === 'RESTOCK' ? 'bg-white text-brand-container shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-white/50', 'flex-1 py-3 px-4 text-center rounded-xl font-bold text-sm transition-all duration-300']">
                                 Restock (Masuk)
                             </button>
                             <button @click="activeTab = 'SALES'" type="button"
-                                :class="[activeTab === 'SALES' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'w-1/3 py-4 px-1 text-center border-b-2 font-medium text-sm transition-colors duration-200']">
+                                :class="[activeTab === 'SALES' ? 'bg-white text-emerald-600 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-white/50', 'flex-1 py-3 px-4 text-center rounded-xl font-bold text-sm transition-all duration-300']">
                                 Sales (Keluar)
                             </button>
                             <button @click="activeTab = 'WASTE'" type="button"
-                                :class="[activeTab === 'WASTE' ? 'border-red-500 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300', 'w-1/3 py-4 px-1 text-center border-b-2 font-medium text-sm transition-colors duration-200']">
+                                :class="[activeTab === 'WASTE' ? 'bg-white text-red-600 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-white/50', 'flex-1 py-3 px-4 text-center rounded-xl font-bold text-sm transition-all duration-300']">
                                 Waste (Dibuang)
                             </button>
                         </nav>
                     </div>
 
-                    <div class="p-6 text-gray-900 border-t border-gray-100">
+                    <div class="p-8 text-gray-900 border-t border-surface-low/50 mt-4">
                         <form @submit.prevent="submit" class="space-y-6">
                             
                             <!-- Pilih Produk -->
                             <div>
                                 <InputLabel for="product_id" value="Pilih Produk" />
-                                <div class="relative">
-                                    <select id="product_id" v-model="form.product_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
-                                        <option value="" disabled>-- Pilih Produk yg Tersedia --</option>
-                                        <option v-for="product in products" :key="product.id" :value="product.id">
-                                            {{ product.name }}
-                                        </option>
-                                    </select>
-                                </div>
+                                <CustomSelect 
+                                    v-model="form.product_id" 
+                                    :options="products" 
+                                    placeholder="Cari Produk Gudang" 
+                                />
                                 <InputError class="mt-2" :message="form.errors.product_id" />
                             </div>
 
@@ -104,7 +104,7 @@ const submit = () => {
                             </div>
 
                             <!-- RESTOCK Only Fields -->
-                            <div v-show="activeTab === 'RESTOCK'" class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-indigo-50/50 rounded-lg border border-indigo-100">
+                            <div v-show="activeTab === 'RESTOCK'" class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-brand-container/5 rounded-2xl border border-brand-container/10">
                                 <div>
                                     <InputLabel for="batch_code" value="Kode Batch (Opsional)" />
                                     <TextInput id="batch_code" type="text" class="mt-1 block w-full text-sm" v-model="form.batch_code" placeholder="Misal: B-001" :required="activeTab === 'RESTOCK'" />
@@ -112,7 +112,7 @@ const submit = () => {
                                 </div>
                                 <div>
                                     <InputLabel for="expiry_date" value="Tanggal Kedaluwarsa *" />
-                                    <TextInput id="expiry_date" type="date" class="mt-1 block w-full text-sm" v-model="form.expiry_date" :required="activeTab === 'RESTOCK'" />
+                                    <TextInput id="expiry_date" type="date" class="mt-1 block w-full text-sm z-50 relative" v-model="form.expiry_date" :required="activeTab === 'RESTOCK'" />
                                     <InputError class="mt-2" :message="form.errors.expiry_date" />
                                 </div>
                             </div>
@@ -126,14 +126,13 @@ const submit = () => {
 
                             <!-- Submit Box -->
                             <div class="flex items-center justify-end pt-4">
-                                <PrimaryButton :class="{'opacity-25': form.processing, 'bg-indigo-600': activeTab !== 'WASTE', 'bg-red-600 hover:bg-red-700': activeTab === 'WASTE'}" :disabled="form.processing">
+                                <PrimaryButton :class="{'opacity-25': form.processing, 'bg-brand hover:bg-brand-container border-0': activeTab === 'RESTOCK', 'bg-emerald-600 hover:bg-emerald-700 border-0': activeTab === 'SALES', 'bg-red-600 hover:bg-red-700 border-0': activeTab === 'WASTE', 'rounded-full px-8 py-3 text-sm font-bold tracking-wide transition-all': true}" :disabled="form.processing">
                                     Simpan Transaksi {{ activeTab }}
                                 </PrimaryButton>
                             </div>
                         </form>
                     </div>
                 </div>
-            </div>
         </div>
     </AuthenticatedLayout>
 </template>
