@@ -14,9 +14,14 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $userId = auth()->id();
+
         // 1. Existing Data
-        $batches = Batch::with('product')->orderBy('expiry_date', 'asc')->get();
-        $transactions = Transaction::with(['product', 'batch', 'user'])->orderBy('created_at', 'desc')->take(20)->get();
+        $batches = Batch::whereHas('product', fn($q) => $q->where('user_id', $userId))
+                        ->with('product')->orderBy('expiry_date', 'asc')->get();
+                        
+        $transactions = Transaction::where('user_id', $userId)
+                        ->with(['product', 'batch', 'user'])->orderBy('created_at', 'desc')->take(20)->get();
 
         // 2. Health Score Kalkulasi
         // Total stok aktual vs stok berisiko (mendekati kedaluwarsa sesuai threshold)
@@ -37,7 +42,8 @@ class DashboardController extends Controller
 
         // 3. Burn Rate Calculation (Rata-rata penjualan per hari dalam 7 hari terakhir)
         $sevenDaysAgo = Carbon::now()->subDays(7);
-        $totalSalesLast7Days = Transaction::where('type', 'SALES')
+        $totalSalesLast7Days = Transaction::where('user_id', $userId)
+            ->where('type', 'SALES')
             ->where('created_at', '>=', $sevenDaysAgo)
             ->sum('quantity');
         
@@ -45,13 +51,14 @@ class DashboardController extends Controller
 
         // 4. Fast & Slow Moving Items (Berdasarkan jumlah terjual 30 hari terakhir)
         $thirtyDaysAgo = Carbon::now()->subDays(30);
-        $salesByProduct = Transaction::where('type', 'SALES')
+        $salesByProduct = Transaction::where('user_id', $userId)
+            ->where('type', 'SALES')
             ->where('created_at', '>=', $thirtyDaysAgo)
             ->select('product_id', DB::raw('SUM(quantity) as total_sales'))
             ->groupBy('product_id')
             ->get();
 
-        $products = Product::all();
+        $products = Product::where('user_id', $userId)->get();
         $itemVelocity = [];
 
         foreach ($products as $product) {

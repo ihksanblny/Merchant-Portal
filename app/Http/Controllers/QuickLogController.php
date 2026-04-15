@@ -7,13 +7,14 @@ use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class QuickLogController extends Controller
 {
     public function index()
     {
-        $products = Product::select('id', 'name')->get();
+        $products = Product::where('user_id', auth()->id())->select('id', 'name')->get();
         return Inertia::render('QuickLog/Index', [
             'products' => $products
         ]);
@@ -23,7 +24,12 @@ class QuickLogController extends Controller
     {
         $request->validate([
             'transaction_type' => 'required|in:RESTOCK,SALES,WASTE',
-            'product_id' => 'required|exists:products,id',
+            'product_id' => [
+                'required',
+                Rule::exists('products', 'id')->where(function ($query) {
+                    return $query->where('user_id', auth()->id())->whereNull('deleted_at');
+                }),
+            ],
             'quantity' => 'required|integer|min:1',
             'note' => 'nullable|string',
             'batch_code' => 'required_if:transaction_type,RESTOCK|nullable|string',
