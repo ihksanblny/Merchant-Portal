@@ -92,7 +92,7 @@ const healthChartOptions = computed(() => ({
                     <!-- Metro 3: Fast & Slow Moving -->
                     <div class="bg-surface-lowest rounded-[2rem] shadow-ambient flex flex-col overflow-hidden">
                         <div class="flex-1 p-6 border-b border-surface-low bg-emerald-50/20">
-                            <h3 class="text-[10px] font-bold text-emerald-700 uppercase tracking-widest flex items-center mb-4"><span class="mr-2">⚡</span> Fast-Moving Items</h3>
+                            <h3 class="text-[10px] font-bold text-emerald-700 uppercase tracking-widest flex items-center mb-4">Fast-Moving Items</h3>
                             <ul class="text-sm space-y-3">
                                 <li v-for="item in metrics.fast_moving" :key="'f-'+item.id" class="flex justify-between items-center text-gray-700">
                                     <span class="truncate pr-2 font-medium">{{ item.name }}</span>
@@ -101,7 +101,7 @@ const healthChartOptions = computed(() => ({
                             </ul>
                         </div>
                         <div class="flex-1 p-6 bg-orange-50/20">
-                            <h3 class="text-[10px] font-bold text-orange-700 uppercase tracking-widest flex items-center mb-4"><span class="mr-2">🐌</span> Slow-Moving Items</h3>
+                            <h3 class="text-[10px] font-bold text-orange-700 uppercase tracking-widest flex items-center mb-4">Slow-Moving Items</h3>
                             <ul class="text-sm space-y-3">
                                 <li v-for="item in metrics.slow_moving" :key="'s-'+item.id" class="flex justify-between items-center text-gray-700">
                                     <span class="truncate pr-2 font-medium">{{ item.name }}</span>
@@ -116,7 +116,7 @@ const healthChartOptions = computed(() => ({
                 <!-- Section: Sisa Stok per Batch -->
                 <div class="bg-surface-lowest shadow-ambient rounded-[2rem] overflow-hidden p-8">
                     <div class="mb-6">
-                        <h3 class="text-xl font-bold tracking-tight text-gray-900 mb-1 flex items-center">📦 Total Stok per Batch</h3>
+                        <h3 class="text-xl font-bold tracking-tight text-gray-900 mb-1 flex items-center">Total Stok per Batch</h3>
                         <p class="text-sm text-gray-500">Status aktual sisa gudang (diurutkan dari yang terdekat kadaluwarsa).</p>
                     </div>
                         
@@ -156,7 +156,7 @@ const healthChartOptions = computed(() => ({
                 <!-- Section: Riwayat Transaksi -->
                 <div class="bg-surface-lowest shadow-ambient rounded-[2rem] overflow-hidden p-8">
                     <div class="mb-6">
-                        <h3 class="text-xl font-bold tracking-tight text-gray-900 mb-1 flex items-center">📝 Riwayat Aktivitas & Transaksi</h3>
+                        <h3 class="text-xl font-bold tracking-tight text-gray-900 mb-1 flex items-center">Riwayat Aktivitas & Transaksi</h3>
                     </div>
                         
                     <div class="overflow-x-auto">

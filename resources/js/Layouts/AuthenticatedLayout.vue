@@ -35,6 +35,15 @@ import { Link } from '@inertiajs/vue3';
                     <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                     <span class="text-sm">Quick Log</span>
                 </Link>
+
+                <Link
+                    :href="route('products.index')"
+                    :class="[route().current('products.*') ? 'bg-surface px-6 py-4 rounded-full font-bold text-brand-container shadow-sm' : 'px-6 py-4 rounded-full font-medium text-gray-500 hover:bg-surface-low hover:text-gray-900 transition-all duration-300', 'flex items-center space-x-4 w-full']"
+                >
+                    <!-- Products Icon -->
+                    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    <span class="text-sm">Produk</span>
+                </Link>
             </nav>
 
             <!-- User Profile & Settings -->

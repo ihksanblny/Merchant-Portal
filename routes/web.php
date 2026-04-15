@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuickLogController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
 use App\Models\Batch;
 use App\Models\Transaction;
@@ -29,6 +30,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Fitur Quick Log & Batch Management
     Route::get('/quick-log', [QuickLogController::class, 'index'])->name('quick-log.index');
     Route::post('/quick-log', [QuickLogController::class, 'store'])->name('quick-log.store');
+
+    // Manajemen Produk
+    Route::resource('products', ProductController::class)->except(['create', 'show', 'edit']);
 });
 
 require __DIR__.'/auth.php';
