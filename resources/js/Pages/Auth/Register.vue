@@ -24,6 +24,11 @@ const submit = () => {
     <div class="relative min-h-screen flex flex-col sm:justify-center items-center py-12 sm:pt-0 bg-slate-50 overflow-hidden">
         <Head title="Register" />
 
+        <Link href="/" class="absolute top-6 left-6 md:top-8 md:left-8 flex items-center justify-center p-3 md:px-5 md:py-2.5 bg-white/50 hover:bg-white backdrop-blur-xl shadow-[0_10px_30px_rgba(8,112,184,0.1)] rounded-full text-slate-600 font-bold transition-all duration-300 hover:scale-105 hover:text-indigo-600 border border-white/50 z-50">
+            <svg class="w-5 h-5 md:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <span class="hidden md:inline">Beranda</span>
+        </Link>
+
         <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
         <div class="absolute top-0 -right-4 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
         <div class="absolute -bottom-8 left-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
