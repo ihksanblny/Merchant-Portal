@@ -1,13 +1,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps({
-    products: Array,
+    products: Object,
 });
 
 // Modal state
@@ -99,7 +99,7 @@ const deleteProduct = (product) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="product in products" :key="product.id" class="group hover:bg-surface-low transition-colors duration-200">
+                        <tr v-for="product in products.data" :key="product.id" class="group hover:bg-surface-low transition-colors duration-200">
                             <td class="py-4 px-4 rounded-l-[1.5rem]">
                                 <div class="font-bold text-gray-900 text-[15px]">{{ product.name }}</div>
                                 <div class="text-[11px] text-gray-400 font-mono tracking-wider">{{ product.sku || 'TANPA SKU' }}</div>
@@ -123,12 +123,37 @@ const deleteProduct = (product) => {
                         </tr>
                     </tbody>
                 </table>
-                <div v-if="products.length === 0" class="text-center py-12 text-gray-400">
+                <div v-if="products.data.length === 0" class="text-center py-12 text-gray-400">
                     <div class="mb-4 text-gray-300 flex justify-center">
                         <svg class="w-16 h-16" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                     </div>
                     <p class="font-bold text-gray-500">Belum ada data produk.</p>
                     <p class="text-sm mt-1">Silakan tambahkan produk pertama Anda di katalog.</p>
+                </div>
+            </div>
+            
+            <!-- Pagination Widget -->
+            <div v-if="products.links && products.links.length > 3" class="px-6 py-4 border-t border-surface-low flex items-center justify-between bg-surface-lowest rounded-b-[2rem] mt-2">
+                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">
+                            Menampilkan <span class="font-bold text-gray-900">{{ products.from }}</span> hingga <span class="font-bold text-gray-900">{{ products.to }}</span> dari <span class="font-bold text-gray-900">{{ products.total }}</span> produk
+                        </p>
+                    </div>
+                    <div>
+                        <nav class="relative z-0 inline-flex rounded-full shadow-sm overflow-hidden border border-surface-low" aria-label="Pagination">
+                            <Link v-for="(link, k) in products.links" :key="k"
+                                :href="link.url || '#'"
+                                :class="[
+                                    link.active ? 'bg-brand-container text-white font-black' : 'bg-surface hover:bg-surface-low text-gray-500 font-bold', 
+                                    'relative inline-flex items-center px-4 py-2 text-sm transition-colors border-r border-surface-low last:border-r-0', 
+                                    !link.url ? 'opacity-40 cursor-not-allowed' : ''
+                                ]"
+                                v-html="link.label"
+                                :preserve-scroll="true"
+                            />
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>

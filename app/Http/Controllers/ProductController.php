@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
+        $products = Product::where('user_id', auth()->id())->orderBy('created_at', 'desc')->paginate(10);
         return Inertia::render('Products/Index', [
             'products' => $products
         ]);
